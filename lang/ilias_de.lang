@@ -44,3 +44,5 @@ copy_insert_clipboard#:#Die ausgewählten Paare wurden in die Zwischenablage kop
 copy_select_none#:#Bitte wählen Sie mindestens eine Paar aus, um dieses in die Zwischenablage zu kopieren
 matchmemopool_plugin_configuration#:#Match & Memo Pool Plugin-Konfiguration
 configuration_saved#:#Konfiguration gespeichert
+save_close#:#Speichern und Schließen
+save_new#:#Speichern und neues Paar erstellen

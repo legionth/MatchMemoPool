@@ -44,3 +44,5 @@ copy_insert_clipboard#:#The selected pair(s) are copied to the clipboard
 copy_select_none#:#Please check at least one pair to copy it to the clipboard
 matchmemopool_plugin_configuration#:#Match & Memo Pool Plugin Configuration
 configuration_saved#:#Configuration saved
+save_close#:#Save and Close
+save_new#:#Save and Create New Pair
