@@ -3,6 +3,11 @@
 //
 
 <!-- language file start -->
+crs_create_xmpl#:#Neuen Match & Memo Pool anlegen
+grp_create_xmpl#:#Neuen Match & Memo Pool anlegen
+fold_create_xmpl#:#Neuen Match & Memo Pool anlegen
+root_create_xmpl#:#Neuen Match & Memo Pool anlegen
+cat_create_xmpl#:#Neuen Match & Memo Pool anlegen
 obj_xmpl#:#Match & Memo Pool
 objs_xmpl#:#Match & Memo Pool
 obj_xmpl_duplicate#:#Kopiere Match & Memo Pool
