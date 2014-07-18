@@ -53,6 +53,29 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	function performCommand($cmd)
 	{
 		global $ilAccess, $ilTabs;
+
+		$next_class = $this->ctrl->getNextClass($this);
+		switch($next_class)
+		{
+			case 'ilmdeditorgui':
+				global $ilErr;
+				if(!$ilAccess->checkAccess('write','',$this->object->getRefId()))
+				{
+					$ilErr->raiseError($this->lng->txt('permission_denied'),$ilErr->WARNING);
+				}
+				include_once 'Services/MetaData/classes/class.ilMDEditorGUI.php';
+				$md_gui = new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType());
+				$md_gui->addObserver($this->object,'MDUpdateListener','General');
+				$ilTabs->setTabActive("meta_data");
+				$this->ctrl->forwardCommand($md_gui);
+				break;
+
+			case 'ilcommonactiondispatchergui':
+				require_once 'Services/Object/classes/class.ilCommonActionDispatcherGUI.php';
+				$gui = ilCommonActionDispatcherGUI::getInstanceFromAjaxCall();
+				$this->ctrl->forwardCommand($gui);
+				break;
+		}
 		
 		switch ($cmd)
 		{
@@ -76,23 +99,6 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 			case "gallery":			// list all commands that need read permission here
 				$this->checkPermission("read");
 				$this->$cmd();
-				break;
-		}
-
-		$next_class = $this->ctrl->getNextClass($this);
-
-		switch($next_class)
-		{
-			case 'ilmdeditorgui':
-				if (!$ilAccess->checkAccess('write','',$this->object->getRefId()))
-				{
-					$ilErr->raiseError($this->lng->txt('permission_denied'),$ilErr->WARNING);
-				}
-				include_once 'Services/MetaData/classes/class.ilMDEditorGUI.php';
-				$md_gui =& new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType());
-				$md_gui->addObserver($this->object,'MDUpdateListener','General');
-				$ilTabs->setTabActive("meta_data");
-				$this->ctrl->forwardCommand($md_gui);
 				break;
 		}
 	}
