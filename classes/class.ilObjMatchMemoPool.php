@@ -469,6 +469,23 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		return 0;
 	}
 
+	public static function _lookupPairCount($a_obj_id, $is_reference = false)
+	{
+		global $ilDB;
+
+		if ($is_reference) $a_obj_id = ilObject::_lookupObjId($a_obj_id);
+		$result = $ilDB->queryF("SELECT paircount FROM rep_robj_xmpl_object WHERE obj_fi = %s",
+			array("integer"),
+			array($a_obj_id)
+		);
+		if ($result->numRows() == 1)
+		{
+			$row = $ilDB->fetchAssoc($result);
+			return $row["paircount"];
+		}
+		return 0;
+	}
+
 	public function __get($value)
 	{
 		switch ($value)

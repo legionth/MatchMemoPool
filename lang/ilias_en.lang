@@ -51,3 +51,5 @@ matchmemopool_plugin_configuration#:#Match & Memo Pool Plugin Configuration
 configuration_saved#:#Configuration saved
 save_close#:#Save and Close
 save_new#:#Save and Create New Pair
+cannot_set_online_not_enough_pairs#:#The Match & Memo Pool cannot be switched to "online", you have to create at least 16 pairs.
+not_enough_pairs#:#There are less than 16 pairs available.

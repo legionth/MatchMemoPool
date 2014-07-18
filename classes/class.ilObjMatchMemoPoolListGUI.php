@@ -55,21 +55,31 @@ class ilObjMatchMemoPoolListGUI extends ilObjectPluginListGUI
 	*						"property" (string) => property name
 	*						"value" (string) => property value
 	*/
-	function getProperties()
+	public function getProperties()
 	{
 		global $lng, $ilUser;
 
 		$props = array();
-		
-		$this->plugin->includeClass("class.ilObjMatchMemoPoolAccess.php");
 
-		if (!ilObjMatchMemoPoolAccess::_lookupOnline($this->obj_id))
+		$this->plugin->includeClass("class.ilObjMatchMemoPoolAccess.php");
+		$this->plugin->includeClass("class.ilObjMatchMemoPool.php");
+
+		if(!ilObjMatchMemoPoolAccess::_lookupOnline($this->obj_id))
 		{
-			$props[] = array("alert" => true, "property" => $lng->txt("status"),
-				"value" => $lng->txt("offline"));
+			$props[] = array(
+				'alert' => true, 'property' => $lng->txt('status'),
+				'value' => $lng->txt('offline')
+			);
+		}
+
+		if(ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < 16)
+		{
+			$props[] = array(
+				'alert' => true, 'property' => $lng->txt('preconditions'),
+				'value' => $this->plugin->txt('not_enough_pairs')
+			);
 		}
 
 		return $props;
 	}
 }
-?>

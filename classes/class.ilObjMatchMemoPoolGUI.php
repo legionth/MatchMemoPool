@@ -228,7 +228,17 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 
 		// online
 		$online = new ilCheckboxInputGUI($this->txt("mpl_online_property"), "online");
-		$online->setInfo($this->txt("mpl_online_property_description"));
+		if(ilObjMatchMemoPool::_lookupPairCount($this->object->getId()) < 16)
+		{
+			$online->setInfo(implode('<br />', array(
+				$this->txt("mpl_online_property_description"),
+				'<span style="color:red">' . $this->txt("cannot_set_online_not_enough_pairs") . '</span>'
+			)));
+		}
+		else
+		{
+			$online->setInfo($this->txt("mpl_online_property_description"));
+		}
 		$online->setChecked($this->object->online);
 		$form->addItem($online);
 
@@ -449,7 +459,18 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	*/
 	function saveProperties()
 	{
-		$this->object->online = (strlen($_POST["online"])) ? $_POST["online"] : 0;
+		if(
+			strlen($_POST['online']) &&
+			ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < 16
+		)
+		{
+			$this->object->setOnline(0);
+			$this->object->doUpdate();
+			ilUtil::sendInfo($this->txt("cannot_set_online_not_enough_pairs"), true);
+			$this->ctrl->redirect($this, "editProperties");
+		}
+
+		$this->object->setOnline(strlen($_POST["online"]) ? $_POST["online"] : 0);
 		$this->object->doUpdate();
 		ilUtil::sendInfo($this->lng->txt("msg_obj_modified"), true);
 		$this->ctrl->redirect($this, "editProperties");
