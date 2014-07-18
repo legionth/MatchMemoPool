@@ -131,13 +131,9 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 	{
 		global $ilDB;
 
-		$affectedRows = $ilDB->manipulateF("DELETE FROM rep_robj_xmpl_object WHERE obj_fi = %s",
-			array('integer'),
-			array($this->getId())
-		);
-		$result = $ilDB->manipulateF("INSERT INTO rep_robj_xmpl_object (obj_fi, isonline) VALUES (%s, %s)",
+		$ilDB->manipulateF("UPDATE rep_robj_xmpl_object SET isonline = %s WHERE obj_fi = %s",
 			array('integer','integer'),
-			array($this->getId(), $this->getOnline())
+			array($this->getOnline(), $this->getId())
 		);
 	}
 
@@ -149,8 +145,13 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 	function doDelete()
 	{
 		global $ilDB;
-		// $myID = $this->getId();
+
+		$affectedRows = $ilDB->manipulateF("DELETE FROM rep_robj_xmpl_object WHERE obj_fi = %s",
+			array('integer'),
+			array($this->getId())
+		);
 		
+		// @todo: Delete pairs? wtf!?!?
 	}
 	
 	/**
