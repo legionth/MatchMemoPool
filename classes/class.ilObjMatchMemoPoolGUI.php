@@ -67,13 +67,13 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 				$md_gui = new ilMDEditorGUI($this->object->getId(), 0, $this->object->getType());
 				$md_gui->addObserver($this->object,'MDUpdateListener','General');
 				$ilTabs->setTabActive("meta_data");
-				$this->ctrl->forwardCommand($md_gui);
+				return $this->ctrl->forwardCommand($md_gui);
 				break;
 
 			case 'ilcommonactiondispatchergui':
 				require_once 'Services/Object/classes/class.ilCommonActionDispatcherGUI.php';
 				$gui = ilCommonActionDispatcherGUI::getInstanceFromAjaxCall();
-				$this->ctrl->forwardCommand($gui);
+				return $this->ctrl->forwardCommand($gui);
 				break;
 		}
 		
