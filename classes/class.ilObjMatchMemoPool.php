@@ -51,9 +51,9 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		global $ilDB;
 
 		$ilDB->manipulateF(
-			"INSERT INTO rep_robj_xmpl_object (obj_fi) VALUES(%s)",
-			array('integer'),
-			array($this->getId())
+			"INSERT INTO rep_robj_xmpl_object (obj_fi, isonline) VALUES(%s, %s)",
+			array('integer', 'integer'),
+			array($this->getId(), $this->getOnline())
 		);
 
 		$this->createMetaData();
