@@ -49,7 +49,12 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 	function doCreate()
 	{
 		global $ilDB;
-		// $myID = $this->getId();
+
+		$ilDB->manipulateF(
+			"INSERT INTO rep_robj_xmpl_object (obj_fi) VALUES(%s)",
+			array('integer'),
+			array($this->getId())
+		);
 
 		$this->createMetaData();
 	}
@@ -131,10 +136,27 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 	{
 		global $ilDB;
 
-		$ilDB->manipulateF("UPDATE rep_robj_xmpl_object SET isonline = %s WHERE obj_fi = %s",
-			array('integer','integer'),
-			array($this->getOnline(), $this->getId())
+		$res = $ilDB->queryF("SELECT * FROM rep_robj_xmpl_object WHERE obj_fi = %s",
+			array('integer'),
+			array($this->getId())
 		);
+		if($ilDB->numRows($res) == 0)
+		{
+			$ilDB->manipulateF(
+				"INSERT INTO rep_robj_xmpl_object (obj_fi, isonline) VALUES(%s, %s)",
+				array('integer', 'integer'),
+				array($this->getId(), $this->getOnline())
+			);
+		}
+		else
+		{
+			$ilDB->manipulateF("UPDATE rep_robj_xmpl_object SET isonline = %s WHERE obj_fi = %s",
+				array('integer','integer'),
+				array($this->getOnline(), $this->getId())
+			);
+		}
+
+		$this->updatePairCount();
 	}
 
 	/**
