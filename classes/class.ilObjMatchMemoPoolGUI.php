@@ -390,7 +390,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$card1->addPlugin("latex");
 		$card1->addButton("latex");
 		$card1->addButton("pastelatex");
-		$card1->setRTESupport($_GET['pid'], "mpl", "memory", null, false, "latest");
+		$card1->setRTESupport($_GET['pid'], "mpl", "memory", null, false);
 		$form->addItem($card1);
 
 		// card2
@@ -404,7 +404,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$card2->addPlugin("latex");
 		$card2->addButton("latex");
 		$card2->addButton("pastelatex");
-		$card2->setRTESupport($_GET['pid'], "mpl", "memory", null, false, "latest");
+		$card2->setRTESupport($_GET['pid'], "mpl", "memory", null, false);
 		$form->addItem($card2);
 
 		// solution
@@ -418,7 +418,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$solution->addPlugin("latex");
 		$solution->addButton("latex");
 		$solution->addButton("pastelatex");
-		$solution->setRTESupport($_GET['pid'], "mpl", "memory", null, false, "latest");
+		$solution->setRTESupport($_GET['pid'], "mpl", "memory", null, false);
 		$form->addItem($solution);
 
 		$form->addCommandButton("savePair", $this->lng->txt("save"));
