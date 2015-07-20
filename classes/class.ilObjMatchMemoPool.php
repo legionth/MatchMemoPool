@@ -11,6 +11,8 @@ include_once("./Services/Repository/classes/class.ilObjectPlugin.php");
 */
 class ilObjMatchMemoPool extends ilObjectPlugin
 {
+	const MIN_PAIRS_NUM = 16;
+
 	protected $plugin;
 	protected $online;
 	protected $pair;

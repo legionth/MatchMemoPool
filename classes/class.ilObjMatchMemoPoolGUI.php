@@ -228,7 +228,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 
 		// online
 		$online = new ilCheckboxInputGUI($this->txt("mpl_online_property"), "online");
-		if(ilObjMatchMemoPool::_lookupPairCount($this->object->getId()) < 16)
+		if(ilObjMatchMemoPool::_lookupPairCount($this->object->getId()) < ilObjMatchMemoPool::MIN_PAIRS_NUM)
 		{
 			$online->setInfo(implode('<br />', array(
 				$this->txt("mpl_online_property_description"),
@@ -444,7 +444,19 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 			{
 				$this->object->deletePair($id);
 			}
+
 			ilUtil::sendInfo($this->txt("msg_pairs_deleted"), true);
+
+			if(
+				strlen($this->object->getOnline()) &&
+				ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < ilObjMatchMemoPool::MIN_PAIRS_NUM
+			)
+			{
+				$this->object->setOnline(false);
+				$this->object->update();
+				ilUtil::sendFailure($this->txt("set_offline_not_enough_pairs"), true);
+			}
+
 			$this->ctrl->redirect($this, 'pairs');
 		}
 		else
@@ -461,7 +473,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	{
 		if(
 			strlen($_POST['online']) &&
-			ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < 16
+			ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < ilObjMatchMemoPool::MIN_PAIRS_NUM
 		)
 		{
 			$this->object->setOnline(0);

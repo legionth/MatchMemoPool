@@ -2,6 +2,7 @@
 
 
 include_once "./Services/Repository/classes/class.ilObjectPluginListGUI.php";
+include_once dirname(__FILE__) . '/class.ilObjMatchMemoPool.php';
 
 /**
 * ListGUI implementation for Gallery object plugin. This one
@@ -78,7 +79,7 @@ class ilObjMatchMemoPoolListGUI extends ilObjectPluginListGUI
 			);
 		}
 
-		if(ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < 16)
+		if(ilObjMatchMemoPool::_lookupPairCount($this->obj_id) < ilObjMatchMemoPool::MIN_PAIRS_NUM)
 		{
 			$props[] = array(
 				'alert' => true, 'property' => $lng->txt('preconditions'),

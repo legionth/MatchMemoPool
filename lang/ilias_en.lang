@@ -54,3 +54,4 @@ save_close#:#Save and Close
 save_new#:#Save and Create New Pair
 cannot_set_online_not_enough_pairs#:#The Match & Memo Pool cannot be switched to "online", you have to create at least 16 pairs.
 not_enough_pairs#:#There are less than 16 pairs available.
+set_offline_not_enough_pairs#:#The Match & Memo Pool was switched to "offline" because there a less than 16 pairs available.
