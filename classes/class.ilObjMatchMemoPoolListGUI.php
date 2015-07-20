@@ -40,10 +40,16 @@ class ilObjMatchMemoPoolListGUI extends ilObjectPluginListGUI
 		return array
 		(
 			array(
-				"permission" => "write",
-				"cmd" => "pairs",
-				"txt" => $this->txt("edit"),
-				"default" => true),
+				'permission' => 'read',
+				'cmd'        => 'infoScreen',
+				'default'    => true
+			),
+			array(
+				'permission' => 'write',
+				'cmd'        => 'pairs',
+				'txt'        => $this->txt('edit'),
+				'default'    => false
+			)
 		);
 	}
 
