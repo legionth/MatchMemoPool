@@ -54,3 +54,4 @@ save_close#:#Speichern und Schließen
 save_new#:#Speichern und neues Paar erstellen
 cannot_set_online_not_enough_pairs#:#Der Match & Memo Pool kann nicht "online" geschaltet werden, da mindestens 16 Paare benötigt werden.
 not_enough_pairs#:#Es sind weniger als 16 Paare enthalten.
+set_offline_not_enough_pairs#:#Der Match & Memo Pool wurde "offline" geschaltet, da weniger als 16 Paare vorliegen.
