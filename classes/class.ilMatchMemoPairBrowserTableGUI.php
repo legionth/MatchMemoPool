@@ -78,8 +78,7 @@ class ilMatchMemoPairBrowserTableGUI extends ilTable2GUI
 			$this->addMultiCommand('move', $this->lng->txt('move'));
 //			$this->addMultiCommand('exportQuestion', $this->lng->txt('export'));
 			$this->addMultiCommand('deletePairs', $this->lng->txt('delete'));
-
-			if (array_key_exists("mpl_clipboard", $_SESSION))
+			if($a_parent_obj->object->clipboardContainsValidItems())
 			{
 				$this->addCommandButton('paste', $this->lng->txt('paste'));
 			}

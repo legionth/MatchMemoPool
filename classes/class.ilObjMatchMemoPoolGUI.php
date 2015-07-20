@@ -610,7 +610,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	*/
 	function paste()
 	{
-		if (array_key_exists("mpl_clipboard", $_SESSION))
+		if($this->object->clipboardContainsValidItems())
 		{
 			$this->object->pasteFromClipboard();
 			ilUtil::sendInfo($this->txt("paste_success"), true);

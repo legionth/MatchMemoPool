@@ -64,7 +64,10 @@ class ilMatchMemoPair
 	public static function _duplicate($id, $mpl)
 	{
 		$source = ilMatchMemoPair::_loadFromDB($id);
-		$source->copyToPool($mpl);
+		if($source)
+		{
+			$source->copyToPool($mpl);
+		}
 	}
 	
 	public static function _loadFromDB($id)

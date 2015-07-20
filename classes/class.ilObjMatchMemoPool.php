@@ -436,6 +436,50 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 	}
 
 	/**
+	 * @return bool
+	 */
+	public function clipboardContainsValidItems()
+	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+
+		if(!array_key_exists('mpl_clipboard', $_SESSION))
+		{
+			return false;
+		}
+		
+		$pairs = $_SESSION['mpl_clipboard'];
+
+		$valid = false;
+		foreach($pairs as $pair)
+		{
+			if(!strlen($pair['id']) || !is_numeric($pair['id']))
+			{
+				continue;
+			}
+
+			$result = $ilDB->queryF(
+				"SELECT obj_fi
+				FROM rep_robj_xmpl_pair
+				INNER JOIN object_data ON object_data.obj_id = obj_fi
+				WHERE pair_id = %s
+				",
+				array("integer"),
+				array($pair["id"])
+			);
+			if($result->numRows() == 1)
+			{
+				$valid = true;
+				break;
+			}
+		}
+
+		return $valid;
+	}
+
+	/**
 	* Copies/Moves a memory pair from the clipboard
 	*
 	* @access private
@@ -446,11 +490,17 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 
 		if (array_key_exists("mpl_clipboard", $_SESSION))
 		{
-			foreach ($_SESSION["mpl_clipboard"] as $pair)
+			$pairs = $_SESSION["mpl_clipboard"];
+			foreach($pairs as $pair)
 			{
 				if (strcmp($pair["action"], "move") == 0)
 				{
-					$result = $ilDB->queryF("SELECT obj_fi FROM rep_robj_xmpl_pair WHERE pair_id = %s",
+					$result = $ilDB->queryF(
+						"SELECT obj_fi
+						FROM rep_robj_xmpl_pair
+						INNER JOIN object_data ON object_data.obj_id = obj_fi
+						WHERE pair_id = %s
+						",
 						array("integer"),
 						array($pair["id"])
 					);
