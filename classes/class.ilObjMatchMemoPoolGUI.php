@@ -501,7 +501,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$upload->setSuffixes(array('txt','csv'));
 		$form->addItem($upload);
 
-		$form->addCommandButton("importCSV", $this->lng->txt("save"));
+		$form->addCommandButton("importCSV", $this->lng->txt("import"));
 		$form->addCommandButton("pairs", $this->lng->txt("cancel"));
 
 		if ($save)
