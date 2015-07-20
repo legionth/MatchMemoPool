@@ -424,6 +424,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$form->addCommandButton("savePair", $this->lng->txt("save"));
 		$form->addCommandButton("savePairClose", $this->txt("save_close"));
 		$form->addCommandButton("savePairNew", $this->txt("save_new"));
+		$form->addCommandButton("pairs", $this->lng->txt("cancel"));
 	
 		$errors = false;
 		if ($save)
