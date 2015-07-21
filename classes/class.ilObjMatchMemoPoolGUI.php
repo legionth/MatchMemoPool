@@ -138,11 +138,12 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 		$info->addProperty('Name', 'Match & Memo Pool');
 		$info->addProperty('Version', xmpl_version);
 		$info->addProperty("Match &amp; Memo", "Konzeption: Lt. Florian Andresen; Leitung: RA Anja Krüger, Prof. Dr. jur. Günter Reiner, Professur für Bürgerliches Recht, Handels-, Gesellschafts-, Wirtschafts- und Steuerrecht,	Helmut Schmidt Universität, Universität der Bundeswehr Hamburg");
-		$info->addProperty('Developer', 'Helmut Schottmüller');
-		$info->addProperty('Kontakt', 'ilias@aurealis.de');
-		$info->addProperty('&nbsp;', 'Aurealis');
+		$info->addProperty('Developer', 'Helmut Schottmüller / Michael Jansen');
+
+		$info->addProperty('Kontakt', 'ilias [at] aurealis [dot] de / mjansen [at] databay [dot] de');
+		$info->addProperty('&nbsp;', 'Aurealis / Databay AG');
 		$info->addProperty('&nbsp;', '');
-		$info->addProperty('&nbsp;', "http://www.aurealis.de");
+		$info->addProperty('&nbsp;', "http://www.aurealis.de / http://www.databay.de");
 
 
 
