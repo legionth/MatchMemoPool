@@ -39,7 +39,7 @@ import_no_title#:#Import (ohne Titel)
 import_no_description#:#Import (ohne Beschreibung)
 import_unknown#:#Unbekannt
 upload_file#:#Datei hochladen
-upload_file_description#:#Sie können Match & Memo-Kartenpaare in Textform in einer sogenannten CSV-Datei importieren. Tragen Sie pro Zeile mindestens die beiden Karten und optional noch einen Lösungstext, den Titel des Paares, den Autor des Paares und die Beschreibung des Paares in die Datei ein und trennen Sie die einzelnen Einträge durch ein Semikolon. Falls Sie ein Semikolon innerhalb ihrer Textbeiträge verwenden müssen, stellen Sie diesem bitte einen umgekehrten Schrägstrich voran. Beispiel: Karte 1;Karte 2;Lösung;Titel;Author;Beschreibung
+upload_file_description#:#Sie können Match & Memo-Kartenpaare in Textform in einer sogenannten CSV-Datei importieren. Tragen Sie pro Zeile mindestens die beiden Karten und optional noch einen Lösungstext, den Titel des Paares, den Autor des Paares und die Beschreibung des Paares in die Datei ein und trennen Sie die einzelnen Einträge durch ein Semikolon. Falls Sie ein Semikolon innerhalb ihrer Textbeiträge verwenden müssen, stellen Sie diesem bitte einen umgekehrten Schrägstrich voran. Beispiel: Karte 1;Karte 2;Lösung;Titel;Autor;Beschreibung
 msg_pairs_no_selection#:#Bitte wählen Sie mindestens ein Paar aus.
 msg_pairs_deleted#:#Paar(e) gelöscht.
 paste_no_objects#:#Es befinden sich keine Paare in der Zwischenablage. Bitte kopieren oder verschieben Sie wenigstens eine Paar in die Zwischenablage.
