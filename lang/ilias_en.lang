@@ -9,7 +9,7 @@ fold_create_xmpl#:#Create Match & Memo Pool
 root_create_xmpl#:#Create Match & Memo Pool
 cat_create_xmpl#:#Create Match & Memo Pool
 obj_xmpl#:#Match & Memo Pool
-objs_xmpl#:#Match & Memo Pool
+objs_xmpl#:#Match & Memo Pools
 obj_xmpl_duplicate#:#Copy Match & Memo Pool
 objs_xmpl_duplicate#:#Copy Match & Memo Pools
 obj_xmpl_select#:#Select Match & Memo Pool
