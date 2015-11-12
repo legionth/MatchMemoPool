@@ -15,5 +15,27 @@ class ilMatchMemoPoolPlugin extends ilRepositoryObjectPlugin
 	{
 		return "MatchMemoPool";
 	}
+
+	protected function uninstallCustom()
+	{
+		/**
+		 * @var $ilDB ilDB
+		 */
+		global $ilDB;
+
+		if($ilDB->tableExists('rep_robj_xmpl_object'))
+		{
+			$ilDB->dropTable('rep_robj_xmpl_object');
+		}
+
+		if($ilDB->tableExists('rep_robj_xmpl_pair'))
+		{
+			$ilDB->dropTable('rep_robj_xmpl_pair');
+		}
+		if($ilDB->sequenceExists('rep_robj_xmpl_pair'))
+		{
+			$ilDB->dropSequence('rep_robj_xmpl_pair');
+		}
+	}
 }
 ?>
