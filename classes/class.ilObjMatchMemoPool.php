@@ -247,7 +247,7 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		global $ilDB;
 
 		$random_pairs = array();
-		if (is_array($pool_id))
+		if(is_array($pool_id))
 		{
 			$total = 0.0;
 			$pools = 0;
@@ -262,31 +262,44 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 				if ($data['obj_id'] > 0)
 				{
 					$pairs = array();
+
 					$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s",
-						array("integer", "integer"),
+						array('integer', 'integer'),
 						array($data['obj_id'], $game_id)
 					);
 					while ($row = $ilDB->fetchAssoc($result))
 					{
-						array_push($pairs, $row['pair_id']);
+						$pairs[] = $row['pair_id'];
 					}
-					$pairnr = ($total == 0) ? round(($nr_of_pairs*1.0) / ($pools*1.0)) : round(($nr_of_pairs*1.0)*($data['percent']/100.0));
-					$psum += ($data['percent']) ? $data['percent'] : (100.0/$pools);
-					if (($psum > 99.5) && (count($random_pairs)+$pairnr < $nr_of_pairs))
+
+					if($total == 0)
 					{
-						$pairnr += $nr_of_pairs - (count($random_pairs)+$pairnr);
+						$pairnr = round(($nr_of_pairs * 1.0) / ($pools * 1.0));
 					}
+					else
+					{
+						$pairnr = round(($nr_of_pairs * 1.0) * ($data['percent'] / 100.0));
+					}
+
+					$pairnr = max(1, $pairnr);
+
+					$psum += ($data['percent']) ? $data['percent'] : (100.0 / $pools);
+					if(($psum > 99.5) && (count($random_pairs) + $pairnr < $nr_of_pairs))
+					{
+						$pairnr += $nr_of_pairs - (count($random_pairs) + $pairnr);
+					}
+
 					$rnd = array_rand($pairs, $pairnr);
-					if (is_array($rnd))
+					if(is_array($rnd))
 					{
-						foreach ($rnd as $index)
+						foreach($rnd as $index)
 						{
-							array_push($random_pairs, $pairs[$index]);
+							$random_pairs[] = $pairs[$index];
 						}
 					}
 					else
 					{
-						array_push($random_pairs, $pairs[$rnd]);
+						$random_pairs[] = $pairs[$rnd];
 					}
 				}
 			}
