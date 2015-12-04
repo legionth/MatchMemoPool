@@ -249,61 +249,49 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		$random_pairs = array();
 		if(is_array($pool_id))
 		{
-			$total = 0.0;
-			$pools = 0;
-			$psum = 0.0;
-			foreach ($pool_id as $data)
+			$pool_id = ilUtil::sortArray($pool_id, 'percent', 'desc', true);
+			foreach($pool_id as $data)
 			{
-				$total += $data['percent'];
-				if ($data['obj_id'] > 0) $pools++;
-			}
-			foreach ($pool_id as $data)
-			{
-				if ($data['obj_id'] > 0)
+				if($data['obj_id'] > 0)
 				{
-					$pairs = array();
-
+					$pairs  = array();
 					$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s",
-						array('integer', 'integer'),
-						array($data['obj_id'], $game_id)
+							array('integer', 'integer'),
+							array($data['obj_id'], $game_id)
 					);
-					while ($row = $ilDB->fetchAssoc($result))
+
+					if($ilDB->numRows($result) == 0)
+					{
+						continue;
+					}
+
+					while($row = $ilDB->fetchAssoc($result))
 					{
 						$pairs[] = $row['pair_id'];
 					}
 
-					if($total == 0)
-					{
-						$pairnr = round(($nr_of_pairs * 1.0) / ($pools * 1.0));
-					}
-					else
-					{
-						$pairnr = round(($nr_of_pairs * 1.0) * ($data['percent'] / 100.0));
-					}
+					shuffle($pairs);
 
-					$pairnr = max(1, $pairnr);
-
-					$psum += ($data['percent']) ? $data['percent'] : (100.0 / $pools);
-					if(($psum > 99.5) && (count($random_pairs) + $pairnr < $nr_of_pairs))
+					$percent   = $data['percent'];
+					$num_pairs = count($pairs);
+					$step      = $percent / $num_pairs;
+					foreach(array_flip(array_values($pairs)) as $pair_id => $key)
 					{
-						$pairnr += $nr_of_pairs - (count($random_pairs) + $pairnr);
-					}
-
-					$rnd = array_rand($pairs, $pairnr);
-					if(is_array($rnd))
-					{
-						foreach($rnd as $index)
-						{
-							$random_pairs[] = $pairs[$index];
-						}
-					}
-					else
-					{
-						$random_pairs[] = $pairs[$rnd];
+						$probability = max(0.0, $percent - (float)$key * $step);
+						$random_pairs[] = array('prop' => $probability, 'pair_id' => $pair_id);
 					}
 				}
 			}
+
+			usort($random_pairs, function($a, $b) {
+				return $b['prop'] > $a['prop'] ? 1 : -1;
+			});
+
 			$random_pairs = array_slice($random_pairs, 0, $nr_of_pairs);
+
+			$random_pairs = array_map(function($pair) {
+				return $pair['pair_id'];
+			}, $random_pairs);
 		}
 		else
 		{
@@ -322,6 +310,7 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 				array_push($random_pairs, $pairs[$index]);
 			}
 		}
+
 		return $random_pairs;
 	}
 
