@@ -4,7 +4,7 @@
 $id = "xmpl";
  
 // code version; must be changed for all code changes
-define('xmpl_version', '1.2.0');
+define('xmpl_version', '1.2.1');
 $version = xmpl_version;
  
 // ilias min and max version; must always reflect the versions that should
