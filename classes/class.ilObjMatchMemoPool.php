@@ -249,6 +249,8 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		$random_pairs = array();
 		if(is_array($pool_id))
 		{
+			$props_per_pool = array();
+
 			$pool_id = ilUtil::sortArray($pool_id, 'percent', 'desc', true);
 			foreach($pool_id as $data)
 			{
@@ -274,11 +276,14 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 
 					$percent   = $data['percent'];
 					$num_pairs = count($pairs);
-					$step      = $percent / $num_pairs;
+					$step      = $percent / ($num_pairs - 1);
 					foreach(array_flip(array_values($pairs)) as $pair_id => $key)
 					{
 						$probability = max(0.0, $percent - (float)$key * $step);
-						$random_pairs[] = array('prop' => $probability, 'pair_id' => $pair_id);
+						$pair_data = array('prop' => $probability, 'pair_id' => $pair_id, 'pool_id' => $data['obj_id']);
+
+						$props_per_pool[$data['obj_id']][] = $pair_data;
+						$random_pairs[]                    = $pair_data;
 					}
 				}
 			}
@@ -288,6 +293,12 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 			});
 
 			$random_pairs = array_slice($random_pairs, 0, $nr_of_pairs);
+
+			/*$pairs_per_pool = array();
+			foreach($random_pairs as $pair)
+			{
+				$pairs_per_pool[$pair['pool_id']][] = $pair;
+			}*/
 
 			$random_pairs = array_map(function($pair) {
 				return $pair['pair_id'];
