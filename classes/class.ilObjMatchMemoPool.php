@@ -282,7 +282,6 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 			}
 
 			$props_per_pool = array();
-			$all_pools_null = true;
 			$valid_pools = ilUtil::sortArray($valid_pools, 'percent', 'desc', true);
 			foreach($valid_pools as $data)
 			{
@@ -305,9 +304,9 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 				shuffle($pairs);
 
 				$percent = $data['percent'];
-				if($percent !== null)
+				if($percent === null)
 				{
-					$all_pools_null = false;
+					$percent = 100 / count($valid_pools);
 				}
 
 				$num_pairs = count($pairs);
@@ -325,11 +324,6 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 					$props_per_pool[$data['obj_id']][] = $pair_data;
 					$random_pairs[]                    = $pair_data;
 				}
-			}
-
-			if($all_pools_null && count($random_pairs) > 0)
-			{
-				shuffle($random_pairs);
 			}
 
 			usort($random_pairs, function($a, $b) {
