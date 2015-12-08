@@ -242,63 +242,111 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		$setting->set($key, $value);
 	}
 
-	public static function _randomPairsForGame($game_id, $pool_id, $nr_of_pairs)
+	public static function _randomPairsForGame($game_id, $pool_ids, $nr_of_pairs)
 	{
 		global $ilDB;
 
 		$random_pairs = array();
-		if(is_array($pool_id))
+		if(is_array($pool_ids))
 		{
-			$props_per_pool = array();
-
-			$pool_id = ilUtil::sortArray($pool_id, 'percent', 'desc', true);
-			foreach($pool_id as $data)
+			$pools_by_percent = array();
+			foreach($pool_ids as $data)
 			{
-				if($data['obj_id'] > 0)
+				if($data['obj_id'] <= 0)
 				{
-					$pairs  = array();
-					$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s",
-							array('integer', 'integer'),
-							array($data['obj_id'], $game_id)
-					);
+					continue;
+				}
 
-					if($ilDB->numRows($result) == 0)
-					{
-						continue;
-					}
+				$key = (string)(float)$data['percent'];
+				$pools_by_percent[$key][] = $data;
+			}
 
-					while($row = $ilDB->fetchAssoc($result))
-					{
-						$pairs[] = $row['pair_id'];
-					}
+			foreach($pools_by_percent  as $percent => &$pools)
+			{
+				shuffle($pools);
 
-					shuffle($pairs);
-
-					$percent   = $data['percent'];
-					$num_pairs = count($pairs);
-					$step      = $percent / ($num_pairs - 1);
-					foreach(array_flip(array_values($pairs)) as $pair_id => $key)
-					{
-						$probability = max(0.0, $percent - (float)$key * $step);
-						$pair_data = array('prop' => $probability, 'pair_id' => $pair_id, 'pool_id' => $data['obj_id']);
-
-						$props_per_pool[$data['obj_id']][] = $pair_data;
-						$random_pairs[]                    = $pair_data;
-					}
+				$prio =  1;
+				foreach($pools as &$data)
+				{
+					$data['prio'] = $prio++;
 				}
 			}
 
+			$valid_pools = array();
+			foreach($pools_by_percent as $pools)
+			{
+				foreach($pools as $pool)
+				{
+					$valid_pools[] = $pool;
+				}
+			}
+
+			$props_per_pool = array();
+			$all_pools_null = true;
+			$valid_pools = ilUtil::sortArray($valid_pools, 'percent', 'desc', true);
+			foreach($valid_pools as $data)
+			{
+				$pairs  = array();
+				$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s", 
+					array('integer', 'integer'),
+					array($data['obj_id'], $game_id)
+				);
+
+				if($ilDB->numRows($result) == 0)
+				{
+					continue;
+				}
+
+				while($row = $ilDB->fetchAssoc($result))
+				{
+					$pairs[] = $row['pair_id'];
+				}
+
+				shuffle($pairs);
+
+				$percent = $data['percent'];
+				if($percent !== null)
+				{
+					$all_pools_null = false;
+				}
+
+				$num_pairs = count($pairs);
+				$step      = $percent / ($num_pairs - 1);
+				foreach(array_flip(array_values($pairs)) as $pair_id => $key)
+				{
+					$probability = max(0.0, $percent - (float)$key * $step);
+					$pair_data = array(
+						'prop'    => $probability,
+						'prio'    => $data['prio'],
+						'pair_id' => $pair_id,
+						'pool_id' => $data['obj_id'],
+					);
+
+					$props_per_pool[$data['obj_id']][] = $pair_data;
+					$random_pairs[]                    = $pair_data;
+				}
+			}
+
+			if($all_pools_null && count($random_pairs) > 0)
+			{
+				shuffle($random_pairs);
+			}
+
 			usort($random_pairs, function($a, $b) {
+				if($b['prop'] == $a['prop'])
+				{
+					return $b['prio'] < $a['prio'] ? 1 : -1;
+				}
 				return $b['prop'] > $a['prop'] ? 1 : -1;
 			});
 
 			$random_pairs = array_slice($random_pairs, 0, $nr_of_pairs);
 
-			/*$pairs_per_pool = array();
+			$pairs_per_pool = array();
 			foreach($random_pairs as $pair)
 			{
 				$pairs_per_pool[$pair['pool_id']][] = $pair;
-			}*/
+			}
 
 			$random_pairs = array_map(function($pair) {
 				return $pair['pair_id'];
@@ -309,7 +357,7 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 			$pairs = array();
 			$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s",
 				array("integer", "integer"),
-				array($pool_id, $game_id)
+				array($pool_ids, $game_id)
 			);
 			while ($row = $ilDB->fetchAssoc($result))
 			{
