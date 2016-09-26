@@ -201,7 +201,7 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 		$new_obj->doUpdate();
 
 		// clone the pairs in the match & memo pool
-		$pairs =& $this->getPairBrowserData();
+		$pairs = $this->getPairBrowserData();
 		foreach ($pairs as $pair)
 		{
 			$new_obj->copyPair($pair['pair_id'], $new_obj->getId());

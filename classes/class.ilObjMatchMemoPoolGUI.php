@@ -25,7 +25,7 @@ include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
 */
 class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 {
-	protected $plugin;
+	public $plugin;
 	
 	/**
 	* Initialisation
