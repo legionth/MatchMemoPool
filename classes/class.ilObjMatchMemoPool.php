@@ -273,9 +273,9 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 			}
 
 			$valid_pools = array();
-			foreach($pools_by_percent as $pools)
+			foreach($pools_by_percent as $validPools)
 			{
-				foreach($pools as $pool)
+				foreach($validPools as $pool)
 				{
 					$valid_pools[] = $pool;
 				}
@@ -286,7 +286,11 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 			foreach($valid_pools as $data)
 			{
 				$pairs  = array();
-				$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id FROM rep_robj_xmpl_pair, rep_robj_xmry_pair WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id AND rep_robj_xmpl_pair.obj_fi = %s AND rep_robj_xmry_pair.obj_fi = %s", 
+				$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id
+					FROM rep_robj_xmpl_pair, rep_robj_xmry_pair
+					WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id
+					AND rep_robj_xmpl_pair.obj_fi = %s
+					AND rep_robj_xmry_pair.obj_fi = %s",
 					array('integer', 'integer'),
 					array($data['obj_id'], $game_id)
 				);
