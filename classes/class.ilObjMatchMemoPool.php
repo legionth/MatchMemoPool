@@ -281,11 +281,11 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 				}
 			}
 
-			$props_per_pool = array();
 			$valid_pools = ilUtil::sortArray($valid_pools, 'percent', 'desc', true);
-			foreach($valid_pools as $data)
-			{
-				$pairs  = array();
+
+			$cardPairsByPool = array();
+			foreach($valid_pools as $data) {
+				$cardPairsByPool[$data['obj_id']] = array('percentage' => $data['percent'], 'pairs' => array());
 				$result = $ilDB->queryF("SELECT rep_robj_xmpl_pair.pair_id
 					FROM rep_robj_xmpl_pair, rep_robj_xmry_pair
 					WHERE rep_robj_xmry_pair.pair_fi = rep_robj_xmpl_pair.pair_id
@@ -295,60 +295,38 @@ class ilObjMatchMemoPool extends ilObjectPlugin
 					array($data['obj_id'], $game_id)
 				);
 
-				if($ilDB->numRows($result) == 0)
-				{
+				if ($ilDB->numRows($result) == 0) {
 					continue;
 				}
 
-				while($row = $ilDB->fetchAssoc($result))
-				{
-					$pairs[] = $row['pair_id'];
+				while ($row = $ilDB->fetchAssoc($result)) {
+					$cardPairsByPool[$data['obj_id']]['pairs'][] = $row['pair_id'];
 				}
-
-				shuffle($pairs);
-
-				$percent = $data['percent'];
-				if($percent === null)
-				{
-					$percent = 100 / count($valid_pools);
-				}
-
-				$num_pairs = count($pairs);
-				$step      = $percent / ($num_pairs - 1);
-				foreach(array_flip(array_values($pairs)) as $pair_id => $key)
-				{
-					$probability = max(0.0, $percent - (float)$key * $step);
-					$pair_data = array(
-						'prop'    => $probability,
-						'prio'    => $data['prio'],
-						'pair_id' => $pair_id,
-						'pool_id' => $data['obj_id'],
-					);
-
-					$props_per_pool[$data['obj_id']][] = $pair_data;
-					$random_pairs[]                    = $pair_data;
-				}
+				shuffle($cardPairsByPool[$data['obj_id']]['pairs']);
 			}
 
-			usort($random_pairs, function($a, $b) {
-				if($b['prop'] == $a['prop'])
-				{
-					return $b['prio'] < $a['prio'] ? 1 : -1;
+			$deck = array();
+			$cardPairAdditionalNeeded = 0;
+			foreach ($cardPairsByPool as $objId => $array) {
+				$cardPairsNeeded = ($nr_of_pairs / 100) * $array['percentage'];
+				$cardPairsNeeded += $cardPairAdditionalNeeded;
+				$currentPairs = 0;
+				foreach ($array['pairs'] as $pairId) {
+					if ($currentPairs == $cardPairsNeeded) {
+						break;
+					}
+					$deck[] = $pairId;
+					$currentPairs++;
 				}
-				return $b['prop'] > $a['prop'] ? 1 : -1;
-			});
-
-			$random_pairs = array_slice($random_pairs, 0, $nr_of_pairs);
-
-			$pairs_per_pool = array();
-			foreach($random_pairs as $pair)
-			{
-				$pairs_per_pool[$pair['pool_id']][] = $pair;
+				$cardPairAdditionalNeeded = $cardPairsNeeded - $currentPairs;
 			}
 
-			$random_pairs = array_map(function($pair) {
-				return $pair['pair_id'];
-			}, $random_pairs);
+			if (count($deck) != $nr_of_pairs) {
+				throw new ilException('The selected pools MUST have enough card pairs.');
+			}
+			shuffle($deck);
+
+			$random_pairs = $deck;
 		}
 		else
 		{
