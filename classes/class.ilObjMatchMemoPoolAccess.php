@@ -33,7 +33,9 @@ class ilObjMatchMemoPoolAccess extends ilObjectPluginAccess
 	
 	public static function _lookupOnline($a_obj_id, $is_reference = false)
 	{
-		global $ilDB;
+		global $DIC;
+
+		$ilDB = $DIC->database();
 
 		if ($is_reference) $a_obj_id = ilObject::_lookupObjId($a_obj_id);
 		$result = $ilDB->queryF("SELECT isonline FROM rep_robj_xmpl_object WHERE obj_fi = %s",
