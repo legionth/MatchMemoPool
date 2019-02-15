@@ -125,7 +125,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	*/
 	function infoScreen()
 	{
-		global $ilAccess, $ilUser, $lng, $ilCtrl, $tpl, $ilTabs;
+		global $lng, $ilCtrl, $ilTabs;
 
 		$ilTabs->setTabActive("info_short");
 
@@ -157,9 +157,6 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 
 		// forward the command
 		$ret = $ilCtrl->forwardCommand($info);
-
-
-		//$tpl->setContent($ret);
 	}
 	//
 	// DISPLAY TABS
@@ -214,7 +211,7 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	function editProperties()
 	{
 		global $ilAccess;
-		global $tpl, $ilTabs;
+		global $ilTabs;
 
 		$ilTabs->activateTab("properties");
 		
@@ -259,7 +256,6 @@ class ilObjMatchMemoPoolGUI extends ilObjectPluginGUI
 	public function pairs($arrFilter = null)
 	{
 		global $rbacsystem;
-		global $ilUser;
 		global $ilTabs;
 
 		$ilTabs->activateTab("pairs");

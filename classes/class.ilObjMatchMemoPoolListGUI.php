@@ -64,7 +64,7 @@ class ilObjMatchMemoPoolListGUI extends ilObjectPluginListGUI
 	*/
 	public function getProperties()
 	{
-		global $lng, $ilUser;
+		global $lng;
 
 		$props = array();
 
