@@ -11,7 +11,7 @@ ILIAS version: 5.0.0
 This repository will no longer maintained here.
 The development continues in a fork of this repository here:
 
-https://github.com/DatabayAG/MatchMemo
+https://github.com/DatabayAG/MatchMemoPool
 
 ## Installation
 
