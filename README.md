@@ -1,8 +1,17 @@
 # MatchMemoPool
 
 ILIAS version: 5.0.0
+
 **Table of Contents**
+* [Notice Februrary 2019](#notice-(february-2019))
 * [Installation](#installation)
+
+## Notice (February 2019)
+
+This repository will no longer maintained here.
+The development continues in a fork of this repository here:
+
+https://github.com/DatabayAG/MatchMemo
 
 ## Installation
 
